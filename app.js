@@ -16,23 +16,24 @@ async function getIP() {
 window.addEventListener("load", getIP);
 
 async function getIPInfo(ip) {
-  let response = await fetch(`http://ip-api.com/json/${ip}`);
+  let response = await fetch(`https://api.ipapi.is?q=${ip}&key=06c1d11f0bf13b71`);
   let data = await response.json();
-  if (data.status != "fail") {
-    appendInDOM(data);
-  } else {
+  console.log(data);
+  if (data.error) {
     alert("Please enter valid IP address");
     inputEl.value = "";
+  } else {
+    appendInDOM(data);
   }
 }
 
 function appendInDOM(data) {
-  ipEl.innerHTML = data.query;
-  inputEl.value = data.query;
-  loactionEl.innerHTML = `${data.country}, ${data.regionName},<br> ${data.city}`;
-  timeEl.innerHTML = data.timezone;
-  ispEl.innerHTML = data.isp;
-  showMap(data.lat, data.lon);
+  ipEl.innerHTML = data.ip;
+  inputEl.value = data.ip;
+  loactionEl.innerHTML = `${data.location.country_code}, ${data.location.city}`;
+  timeEl.innerHTML = data.location.timezone;
+  ispEl.innerHTML = data.asn.org;
+  showMap(data.location.latitude, data.location.longitude);
 }
 
 let map;
